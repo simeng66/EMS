@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+
+<struts>
+	 <package name="ssh2" extends="struts-default">  
+        <action name="saveStu" class="action.SaveStuAction">  
+            <result name="success" type="redirect">listStu.action</result>
+            <result name="input">/students/update.jsp</result>    
+        </action>
+        <action name="saveSushe" class="action.SusheAction"  method="doCreateSushe">  
+            <result name="success" type="redirect">listSushe.action</result>
+            <result name="input">/sushe/save.jsp</result>    
+        </action>  
+          
+        <action name="listStu" class="action.ListStuAction">  
+            <result name="success">/students/list.jsp</result>  
+        </action>
+        <action name="listSushe" class="action.SusheAction" method="findAllsushe" >  
+            <result name="success">/sushe/list.jsp</result>  
+        </action>  
+          
+        <action name="deleteStu" class="action.DeleteStuAction">  
+            <result name="success" type="redirect">listStu.action</result>  
+        </action>
+        <action name="deleteSushe" class="action.SusheAction" method="removeSushe" >  
+            <result name="success" type="redirect">listSushe.action</result>  
+        </action>  
+          
+        <action name="findStuById" class="action.FindStuByIdAction">  
+            <result name="success">/students/update.jsp</result>  
+        </action>
+        <action name="findStuByxh" class="action.FindStuByxh">  
+            <result name="success">/students/find_result.jsp</result>  
+        </action>
+        <action name="findSushe" class="action.SusheAction" method="findSusheById" >  
+            <result name="success">/sushe/find_result.jsp</result>  
+        </action> 
+        <action name="mobileFindSushe" class="action.SusheAction" method="findSusheById" >  
+            <result name="success">/mobile/find.jsp</result>  
+        </action>  
+          
+        <action name="updateStu" class="action.UpdateStuAction">  
+            <result name="success" type="redirect">listStu.action</result>
+            <result name="input">/students/update.jsp</result>  
+        </action> 
+        
+        <action name="login" class="action.Login">  
+            <result name="success" type="redirect">/users/Users_login_success.jsp</result>
+            <result name="input">/users/Users_login.jsp</result>  
+        </action>
+        
+        <action name="jiaofei" class="action.Jiaofeiaction">  
+            <result name="success" type="redirect">/mobile/success.jsp</result>
+            <result name="input">/mobile/find.jsp</result> 
+        </action>
+        
+        <action name="MobileLogin" class="action.MobileLogin">  
+            <result name="success" type="redirect">/mobile/charge.jsp</result>
+            <result name="input">/mobile/index.jsp</result> 
+        </action>
+        
+        <action name="changePw" class="action.changePw">  
+            <result name="success" type="redirect">/sushe/changeS.jsp</result>
+            <result name="input">/users/changePw.jsp</result> 
+        </action>
+        
+         
+    </package>  
+</struts>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 想到与Hibernate的hibernate.cfg.xml -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName">
+			<value>com.mysql.jdbc.Driver</value>
+		</property>
+
+		<property name="url">
+			<value>jdbc:mysql://localhost:3306/ems</value>
+		</property>
+
+		<property name="username">
+			<value>root</value>
+		</property>
+
+		<property name="password">
+			<value>root</value>
+		</property>
+
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref local="dataSource" />
+		</property>
+
+		<property name="mappingResources">
+			<list>
+				<value>entity/Student.hbm.xml</value>
+				<value>entity/Tsushe.hbm.xml</value>
+				<value>entity/Tadmin.hbm.xml</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+
+				<prop key="hibernate.show_sql">
+					true
+				</prop>
+			</props>
+		</property>
+
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="stuDao" class="dao.StudentDaoImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="stuServiceTarget" class="service.StuServiceImpl" scope="singleton">
+		<property name="dao" ref="stuDao" />
+	</bean>
+	<bean id="stuService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="target">
+			<ref local="stuServiceTarget" />
+		</property>
+
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+
+
+	<bean id="tSusheDao" class="dao.TSusheDaoImpl" scope="singleton">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="susheServiceTarget" class="service.SusheServiceImpl"
+		scope="singleton">
+		<property name="susheDao" ref="tSusheDao" />
+	</bean>
+	<bean id="susheService"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="target">
+			<ref local="susheServiceTarget" />
+		</property>
+
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 学生信息 -->
+	<bean id="SaveStuAction" class="action.SaveStuAction" scope="prototype">
+		<property name="stuService" ref="stuService"></property>
+	</bean>
+
+	<bean id="ListStuAction" class="action.ListStuAction" scope="prototype">
+		<property name="stuService" ref="stuService"></property>
+	</bean>
+
+	<bean id="RemoveStuAction" class="action.DeleteStuAction" scope="prototype">
+		<property name="stuService" ref="stuService"></property>
+	</bean>
+
+	<bean id="FindStuByIdAction" class="action.FindStuByIdAction">
+		<property name="stuService" ref="stuService"></property>
+	</bean>
+
+	<bean id="UpdateStuAction" class="action.UpdateStuAction" scope="prototype">
+		<property name="stuService" ref="stuService"></property>
+	</bean>
+
+	<bean id="SusheAction" class="action.SusheAction" scope="prototype">
+		<property name="susheService" ref="susheService"></property>
+	</bean>
+	
+	<bean id="Jiaofeiaction" class="action.Jiaofeiaction" scope="prototype">
+		<property name="susheService" ref="susheService"></property>
+	</bean>
+	
+	<bean id="MobileLogin" class="action.MobileLogin" scope="prototype">
+		<property name="stuService" ref="stuService"></property>
+	</bean>
+	
+	<bean id="Login" class="action.Login" scope="prototype">
+		<property name="susheService" ref="susheService"></property>
+	</bean>
+
+</beans>  
